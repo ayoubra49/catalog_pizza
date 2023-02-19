@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Remove Ingredient from Pizza</h1>
+
+    <p>Are you sure you want to remove {{ pizzaIngredient.ingredient.name }} from {{ pizza.name }}?</p>
+
+    <form method="POST" action="{{ path('remove_ingredient_from_pizza', {'id': pizza.id, 'pizzaIngredientId': pizzaIngredient.id}) }}" onsubmit="return confirm('Are you sure?')">
+        <input type="hidden" name="_method" value="POST">
+        {{ csrf_token('remove_ingredient_from_pizza') }}
+        <button type="submit" class="btn btn-danger">Remove Ingredient</button>
+    </form>
+{% endblock %}

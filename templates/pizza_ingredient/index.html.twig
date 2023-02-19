@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des ingrédients pour pizzas{% endblock %}
+
+{% block body %}
+    <h1>Liste des ingrédients pour pizzas</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pizzaIngredient in pizzaIngredients %}
+            <tr>
+                <td>{{ pizzaIngredient.id }}</td>
+                <td>{{ pizzaIngredient.ingredient.name }}</td>
+                <td>{{ pizzaIngredient.ingredient.price }}</td>
+                <td>
+                    <a href="{{ path('remove_ingredient_from_pizza', {'id': pizzaIngredient.pizza.id, 'pizzaIngredientId': pizzaIngredient.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet ingrédient de la pizza ?')">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun ingrédient pour cette pizza</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('add_ingredient_to_pizza', {'id': pizza.id}) }}" class="btn btn-primary">Ajouter un ingrédient</a>
+
+    <a href="{{ path('pizza_index') }}" class="btn btn-secondary">Retour à la liste des pizzas</a>
+{% endblock %}

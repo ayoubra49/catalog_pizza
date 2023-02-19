@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des pizzas{% endblock %}
+
+{% block body %}
+    <h1>Liste des pizzas</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prix de vente</th>
+            <th>Ingrédients</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pizza in pizzas %}
+            <tr>
+                <td>{{ pizza.name }}</td>
+                <td>{{ pizza.price }} €</td>
+                <td>
+                    <ul>
+                        {% for pizzaIngredient in pizza.pizzaIngredients %}
+                            <li>{{ pizzaIngredient.ingredient.name }} ({{ pizzaIngredient.quantity }})</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td><a href="{{ path('pizza_edit', {'id': pizza.id}) }}">Modifier</a></td>
+                <td>
+                    {{ form_start(delete_form) }}
+                    <input type="hidden" name="id" value="{{ pizza.id }}" />
+                    <button type="submit" class="btn btn-link">Supprimer</button>
+                    {{ form_end(delete_form) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5">Aucune pizza n'a été trouvée.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{{ path('pizza_new') }}" class="btn btn-primary">Ajouter une nouvelle pizza</a>
+    </div>
+{% endblock %}

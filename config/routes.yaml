@@ -1,3 +1,21 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+index:
+  path: /
+  controller: App\Controller\HomeController::index
+
+pizzas:
+  path: /pizzas
+  controller: App\Controller\PizzaController::index
+
+pizza_new:
+  path: /pizzas/new
+  controller: App\Controller\PizzaController::new
+
+pizza_show:
+  path: /pizzas/{id}
+  controller: App\Controller\PizzaController::show
+  requirements:
+    id: '\d+'

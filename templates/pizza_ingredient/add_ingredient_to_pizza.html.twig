@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un ingrédient à la pizza {{ pizza.name }}{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un ingrédient à la pizza {{ pizza.name }}</h1>
+
+    {{ form_start(form) }}
+
+    <div class="form-group">
+        {{ form_label(form.ingredient) }}
+        {{ form_widget(form.ingredient, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.ingredient) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.quantity) }}
+        {{ form_widget(form.quantity, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.quantity) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('show_pizza', {'id': pizza.id}) }}" class="btn btn-secondary">Retour à la pizza</a>
+{% endblock %}

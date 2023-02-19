@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un ingrédient{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un ingrédient</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.price) }}
+
+    <button type="submit" class="btn btn-success">Ajouter</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('ingredient_index') }}">Retour à la liste</a>
+{% endblock %}

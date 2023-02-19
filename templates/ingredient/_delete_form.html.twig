@@ -1,0 +1,5 @@
+{% if app.user %}
+    {{ form_start(deleteForm, {'attr': {'class': 'form-inline'}}) }}
+    <button class="btn btn-danger" type="submit">Supprimer</button>
+    {{ form_end(deleteForm) }}
+{% endif %}

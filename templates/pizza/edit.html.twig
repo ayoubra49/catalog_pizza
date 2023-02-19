@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la pizza{% endblock %}
+
+{% block body %}
+    <h1>Modifier la pizza</h1>
+
+    {{ include('pizza/_form.html.twig', { 'button_label': 'Modifier' }) }}
+
+    <a href="{{ path('pizza_index') }}">Retour à la liste des pizzas</a>
+
+    {{ include('pizza/_delete_form.html.twig') }}
+{% endblock %}
