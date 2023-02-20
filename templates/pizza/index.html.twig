@@ -22,7 +22,7 @@
                 <td>
                     <ul>
                         {% for pizzaIngredient in pizza.pizzaIngredients %}
-                            <li>{{ pizzaIngredient.ingredient.name }} ({{ pizzaIngredient.quantity }})</li>
+                            <li>{{ pizzaIngredient.name }} ({{ pizzaIngredient.price }} €)</li>
                         {% endfor %}
                     </ul>
                 </td>

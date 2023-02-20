@@ -1,11 +1,17 @@
 {{ form_start(form) }}
 
+
     {{ form_row(form.name) }}
-
     {{ form_row(form.price) }}
-
-    {{ form_row(form.pizzaIngredients) }}
-
-<button type="submit" class="btn btn-primary">Enregistrer</button>
+<div class="form-group">
+    <label>Ingrédients :</label>
+    {% for ingredient in form.pizzaIngredients %}
+        <div class="form-check">
+            {{ form_widget(ingredient) }}
+            {{ form_label(ingredient) }}
+        </div>
+    {% endfor %}
+</div>
+    {{ form_widget(form) }}
 
 {{ form_end(form) }}

@@ -6,7 +6,9 @@ use App\Entity\Ingredient;
 use App\Entity\Pizza;
 use App\Entity\PizzaIngredient;
 use App\Form\PizzaType;
+use App\Repository\PizzaIngredientRepository;
 use App\Repository\PizzaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -19,14 +21,25 @@ class PizzaController extends AbstractController
     /**
      * @Route("/pizzas", name="pizza_index", methods={"GET"})
      */
-    public function index(PizzaRepository $pizzaRepository): Response
+    public function index(PizzaRepository $pizzaRepository, PizzaIngredientRepository $pizzaIngredientRepository): Response
     {
         $pizzas = $pizzaRepository->findAll();
-
+        $pizzaIngredients = [];
+        foreach ($pizzas as $pizza) {
+            $ingredientsData = $pizzaIngredientRepository->findIngredientByPizzaId($pizza->getId());
+            $ingredients = [];
+            foreach ($ingredientsData as $ingredientData) {
+                $ingredient = new Ingredient();
+                $ingredient->setName($ingredientData['name']);
+                $ingredient->setPrice($ingredientData['price']);
+                $ingredients[] = $ingredient;
+            }
+            $pizzaIngredientsCollection = new ArrayCollection($ingredients);
+            $pizza->setPizzaIngredients($pizzaIngredientsCollection);
+        }
         $form = $this->createFormBuilder()
             ->add('id', HiddenType::class)
             ->getForm();
-
         return $this->render('pizza/index.html.twig', [
             'pizzas' => $pizzas,
             'delete_form' => $form->createView(),
@@ -34,35 +47,25 @@ class PizzaController extends AbstractController
     }
 
     /**
-     * @Route("/pizzas/{id}", name="pizza_show", methods={"GET"})
-     */
-    public function show(Pizza $pizza): Response
-    {
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $pizzaIngredients = $entityManager->getRepository(PizzaIngredient::class)->findBy(['pizza' => $pizza]);
-
-        // Afficher un message flash s'il y en a un
-        $successMessage = $this->get('session')->getFlashBag()->get('success');
-
-        return $this->render('pizza/show.html.twig', [
-            'pizza' => $pizza,
-            'pizzaIngredients' => $pizzaIngredients,
-            'successMessage' => $successMessage,
-        ]);
-    }
-
-    /**
      * @Route("/pizzas/new", name="pizza_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, PizzaIngredientRepository $pizzaIngredientRepository): Response
     {
         $pizza = new Pizza();
         $form = $this->createForm(PizzaType::class, $pizza);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ingredients = $form->getData()->getPizzaIngredients();
             $entityManager = $this->getDoctrine()->getManager();
+
+            foreach ($ingredients as $ingredient) {
+                $pizzaIngredient = new PizzaIngredient();
+                $pizzaIngredient->setPizza($pizza);
+                $pizzaIngredient->setIngredient($ingredient);
+                $entityManager->persist($pizzaIngredient);
+            }
+
             $entityManager->persist($pizza);
             $entityManager->flush();
 
@@ -84,7 +87,18 @@ class PizzaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $ingredients = $form->getData()->getPizzaIngredients();
+            $entityManager = $this->getDoctrine()->getManager();
+
+            foreach ($ingredients as $ingredient) {
+                $pizzaIngredient = new PizzaIngredient();
+                $pizzaIngredient->setPizza($pizza);
+                $pizzaIngredient->setIngredient($ingredient);
+                $entityManager->persist($pizzaIngredient);
+            }
+
+            $entityManager->persist($pizza);
+            $entityManager->flush();
 
             return $this->redirectToRoute('pizza_index');
         }
@@ -97,7 +111,7 @@ class PizzaController extends AbstractController
     }
 
     /**
-     * @Route("/pizzas/{id}", name="pizza_delete", methods={"POST"})
+     * @Route("/pizzas/{id}", name="pizza_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Pizza $pizza): Response
     {
@@ -125,7 +139,7 @@ class PizzaController extends AbstractController
         $entityManager->persist($pizzaIngredient);
         $entityManager->flush();
 
-        return $this->redirectToRoute('show_pizza', ['id' => $pizza->getId()]);
+        return $this->redirectToRoute('pizza_show', ['id' => $pizza->getId()]);
     }
 
     /**
@@ -136,7 +150,26 @@ class PizzaController extends AbstractController
         $entityManager->remove($pizzaIngredient);
         $entityManager->flush();
 
-        return $this->redirectToRoute('show_pizza', ['id' => $pizza->getId()]);
+        return $this->redirectToRoute('pizza_show', ['id' => $pizza->getId()]);
+    }
+
+    /**
+     * @Route("/pizzas/{id}", name="pizza_show", methods={"GET"})
+     */
+    public function show(Pizza $pizza): Response
+    {
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $pizzaIngredients = $entityManager->getRepository(PizzaIngredient::class)->findByPizzaId($pizza->getId());
+
+        // Afficher un message flash s'il y en a un
+        $successMessage = $this->get('session')->getFlashBag()->get('success');
+
+        return $this->render('pizza/show.html.twig', [
+            'pizza' => $pizza,
+            'pizzaIngredients' => $pizzaIngredients,
+            //'successMessage' => $successMessage,
+        ]);
     }
 
 }

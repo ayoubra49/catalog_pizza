@@ -48,8 +48,11 @@ final class Version20230219223456 extends AbstractMigration
         $this->addSql("INSERT INTO pizza (name, price) VALUES ('Pepperoni', 10.00)");
 
         // insert some data into PizzaIngredient table
-        $this->addSql("INSERT INTO pizza_ingredient (quantity, pizza_id, ingredient_id) VALUES (100, 1, 1)");
-        $this->addSql("INSERT INTO pizza_ingredient (quantity, pizza_id, ingredient_id) VALUES (100, 2, 1);");
+        $this->addSql("INSERT INTO pizza_ingredient (pizza_id, ingredient_id) VALUES (1, 1)");
+        $this->addSql("INSERT INTO pizza_ingredient (pizza_id, ingredient_id) VALUES (2, 1)");
+        $this->addSql("INSERT INTO pizza_ingredient (pizza_id, ingredient_id) VALUES (1, 6)");
+        $this->addSql("INSERT INTO pizza_ingredient (pizza_id, ingredient_id) VALUES (1, 4)");
+        $this->addSql("INSERT INTO pizza_ingredient (pizza_id, ingredient_id) VALUES (2, 5)");
     }
 
     public function down(Schema $schema): void

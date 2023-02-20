@@ -18,11 +18,6 @@ class PizzaIngredient
     private $id;
 
     /**
-     * @ORM\Column(type="float")
-     */
-    private $quantity;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Pizza::class, inversedBy="pizzaIngredients")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -37,18 +32,6 @@ class PizzaIngredient
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getQuantity(): ?float
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(float $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
     }
 
     public function getPizza(): ?Pizza

@@ -20,7 +20,6 @@ class PizzaIngredientType extends AbstractType
                 'class' => Ingredient::class,
                 'choice_label' => 'name',
             ])
-            ->add('quantity', NumberType::class)
             ->add('pizza', EntityType::class, [
                 'class' => Pizza::class,
                 'choice_label' => 'name',

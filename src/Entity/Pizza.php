@@ -29,7 +29,7 @@ class Pizza
     private $price;
 
     /**
-     * @ORM\OneToMany(targetEntity=PizzaIngredient::class, mappedBy="pizza", cascade={"persist"})
+     * @var ArrayCollection
      */
     private $pizzaIngredients;
 
@@ -55,7 +55,7 @@ class Pizza
         return $this;
     }
 
-    public function getPrice(): ?float
+        public function getPrice(): ?float
     {
         return $this->price;
     }
@@ -67,9 +67,28 @@ class Pizza
         return $this;
     }
 
-    public function getPizzaIngredients(): ArrayCollection
+    public function addPizzaIngredient(Ingredient $ingredient): self
     {
-        return new ArrayCollection($this->pizzaIngredients->toArray());
+        $pizzaIngredient = new PizzaIngredient();
+        $pizzaIngredient->setPizza($this);
+        $pizzaIngredient->setIngredient($ingredient);
+
+        $this->pizzaIngredients[] = $pizzaIngredient;
+
+        return $this;
+    }
+
+    public function setPizzaIngredients(ArrayCollection $pizzaIngredients): self
+    {
+        $this->pizzaIngredients = $pizzaIngredients;
+
+        return $this;
+    }
+
+
+    public function getPizzaIngredients(): ?ArrayCollection
+    {
+        return $this->pizzaIngredients;
     }
 
     public function getTotalPrice(): float

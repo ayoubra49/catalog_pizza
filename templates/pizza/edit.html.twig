@@ -3,11 +3,38 @@
 {% block title %}Modifier la pizza{% endblock %}
 
 {% block body %}
-    <h1>Modifier la pizza</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4">Modifier la pizza</h1>
 
-    {{ include('pizza/_form.html.twig', { 'button_label': 'Modifier' }) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+                </div>
 
-    <a href="{{ path('pizza_index') }}">Retour à la liste des pizzas</a>
+                <div class="form-group">
+                    {{ form_label(form.price) }}
+                    {{ form_widget(form.price, { 'attr': {'class': 'form-control'} }) }}
+                </div>
 
-    {{ include('pizza/_delete_form.html.twig') }}
+                <div class="form-group">
+                    <label>Ingrédients :</label>
+                    {% for ingredient in form.pizzaIngredients %}
+                        <div class="form-check">
+                            {{ form_widget(ingredient) }}
+                            {{ form_label(ingredient) }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+        <a href="{{ path('pizza_index') }}">Retour à la liste des pizzas</a>
+
+        {{ include('pizza/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

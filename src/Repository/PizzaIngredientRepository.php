@@ -64,15 +64,26 @@ class PizzaIngredientRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?PizzaIngredient
+    public function findByPizzaId($value): ?array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
+            ->where('p.pizza = :val')
             ->setParameter('val', $value)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+
+    public function findIngredientByPizzaId($value): ?array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('i.name, i.price')
+            ->join('p.ingredient', 'i')
+            ->where('p.pizza = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 }

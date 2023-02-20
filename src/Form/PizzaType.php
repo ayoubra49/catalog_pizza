@@ -22,7 +22,10 @@ class PizzaType extends AbstractType
             ->add('name', TextType::class)
             ->add('price', NumberType::class)
             ->add('pizzaIngredients', EntityType::class, [
-                'class' => PizzaIngredientType::class,
+                'class' => Ingredient::class,
+                'choice_label' => function (Ingredient $ingredient) {
+                    return sprintf('%s (%s €)', $ingredient->getName(), $ingredient->getPrice());
+                },
                 'multiple' => true,
                 'expanded' => true,
                 'by_reference' => false,

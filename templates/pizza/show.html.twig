@@ -16,12 +16,12 @@
         {% endfor %}
     </ul>
     <hr/>
-    <form method="post" action="{{ path('add_ingredient_to_pizza', {'id': pizza.id}) }}">
+    <form method="post" action="{{ path('add_ingredient_to_pizza', {'id': pizza.id, 'ingredientId': '1'}) }}">
         <div class="form-group">
             <label for="ingredient">Ingrédient:</label>
             <select id="ingredient" name="ingredient">
-                {% for ingredient in ingredients %}
-                    <option value="{{ ingredient.id }}">{{ ingredient.name }} ({{ ingredient.price }} €)</option>
+                {% for ingredient in pizzaIngredients %}
+                    <option value="{{ ingredient.id }}">{{ ingredient.ingredient.name }}</option>
                 {% endfor %}
             </select>
         </div>
